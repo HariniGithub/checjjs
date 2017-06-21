@@ -96,7 +96,7 @@
                 new Color([255,255,255]),2), new Color(colors[index]));
             }
 	var gridArray=[];
-	    projectedGeoms=[];
+	projectedGeoms=[];
         for(var i=0;i<gridArray.length;i++){
             gridGeoms.push(gridArray[i].geometry);
         }
