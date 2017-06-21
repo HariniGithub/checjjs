@@ -63,8 +63,69 @@
         var yLat=Number($("#txtLat").val());    
 	    //   Creating a buffer with given radius
 	    //   defining the UTM grid and querying the grids inside the buffer. 
-  var gridArray=[];
+  var gridStats=[];
+//    Calculating the values inside  grid
+    function calculateValues(featureSet){                    
+        var popCount=0;
+        var conlevel=0;
+        var obj=new Object();                    
+        if(featureSet.features.length>0){
+            for(var i=0;i<featureSet.features.length;i++){
+                popCount+=featureSet.features[i]["attributes"].Population;
+                conlevel+=featureSet.features[i]["attributes"].Confidence;
+               
+            } 
+            obj.fCnt=featureSet.features.length;
+            obj.pCnt=popCount;
+            obj.cCnt=(conlevel/(obj.fCnt*100));
+        }else{
+            obj.fCnt=0;
+            obj.pCnt=popCount;
+            //	obj.cCnt=conlevel;
+             }
+             gridStats.push(obj);
+            
+             applyColor(obj.cCnt,popCount);          
+         }   
+	    function pointQueryResults(featureSet){                             
+        calculateValues(featureSet);
+        summerisePoints();
+    }
+    function pointQueryError(error){      
+        summerisePoints();
+        gridIncrement++;
+    }    
+    
+	    //    Summarising the points inside a particular grid 
+    function summerisePoints(){   
+        if(gridIncrement<=projectedGeoms.length)
+        {        
+            var qryObj=new Query();
+            qryObj.where="FID>0";
+            qryObj.outFields=["*"];
+            qryObj.geometry=projectedGeoms[gridIncrement];                          
+            qryObj.returnGeometry=false;
+            var qryTaskObj=new QueryTask("https://services7.arcgis.com/V0D79gP9Almspf9E/arcgis/rest/services/RandomSterlingdata/FeatureServer/0");
+            qryTaskObj.execute(qryObj,pointQueryResults,pointQueryError);                        
+        }
+    }
+	    var gridArray=[];
 //   Adding the grids to the map
+	       var outSR = new SpatialReference(4326);
+   var gridIncrement=0,projectedGeoms=[];                
+   
+	    function projectGrids(){         
+       
+        var gridGeoms=[];
+        projectedGeoms=[];
+        for(var i=0;i<gridArray.length;i++){
+            gridGeoms.push(gridArray[i].geometry);
+        }
+        esriConfig.defaults.geometryService.project( gridGeoms, outSR, function(projectedPolygons) {
+            projectedGeoms=projectedPolygons;
+            summerisePoints();
+        });
+    }
    function gridQueryResults(featureSet){
        if(featureSet.features.length>0){
            for(var i=0;i<featureSet.features.length;i++){
@@ -119,66 +180,10 @@
        alert("Problem in Query"); 
    }
   
-   var outSR = new SpatialReference(4326);
-   var gridIncrement=0,projectedGeoms=[];                
-   function projectGrids(){         
-       
-        var gridGeoms=[];
-        projectedGeoms=[];
-        for(var i=0;i<gridArray.length;i++){
-            gridGeoms.push(gridArray[i].geometry);
-        }
-        esriConfig.defaults.geometryService.project( gridGeoms, outSR, function(projectedPolygons) {
-            projectedGeoms=projectedPolygons;
-            summerisePoints();
-        });
-    }
-//    Summarising the points inside a particular grid 
-    function summerisePoints(){   
-        if(gridIncrement<=projectedGeoms.length)
-        {        
-            var qryObj=new Query();
-            qryObj.where="FID>0";
-            qryObj.outFields=["*"];
-            qryObj.geometry=projectedGeoms[gridIncrement];                          
-            qryObj.returnGeometry=false;
-            var qryTaskObj=new QueryTask("https://services7.arcgis.com/V0D79gP9Almspf9E/arcgis/rest/services/RandomSterlingdata/FeatureServer/0");
-            qryTaskObj.execute(qryObj,pointQueryResults,pointQueryError);                        
-        }
-    }
-    function pointQueryResults(featureSet){                             
-        calculateValues(featureSet);
-        summerisePoints();
-    }
-    function pointQueryError(error){      
-        summerisePoints();
-        gridIncrement++;
-    }    
-    
-    var gridStats=[];
-//    Calculating the values inside  grid
-    function calculateValues(featureSet){                    
-        var popCount=0;
-        var conlevel=0;
-        var obj=new Object();                    
-        if(featureSet.features.length>0){
-            for(var i=0;i<featureSet.features.length;i++){
-                popCount+=featureSet.features[i]["attributes"].Population;
-                conlevel+=featureSet.features[i]["attributes"].Confidence;
-               
-            } 
-            obj.fCnt=featureSet.features.length;
-            obj.pCnt=popCount;
-            obj.cCnt=(conlevel/(obj.fCnt*100));
-        }else{
-            obj.fCnt=0;
-            obj.pCnt=popCount;
-            //	obj.cCnt=conlevel;
-             }
-             gridStats.push(obj);
-            
-             applyColor(obj.cCnt,popCount);          
-         }                
+
+
+   
+                
 //Apply color and transparancy for the grid
 //Confidence -->   Transperancy of the grid
 //0 – 25% ? 20% transparency
