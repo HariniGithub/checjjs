@@ -122,7 +122,19 @@
         var yLat=Number($("#txtLat").val());    
 	    //   Creating a buffer with given radius
 	    //   defining the UTM grid and querying the grids inside the buffer. 
-  var gridStats=[];
+  function summerisePoints(){   
+        if(gridIncrement<=projectedGeoms.length)
+        {        
+            var qryObj=new Query();
+            qryObj.where="FID>0";
+            qryObj.outFields=["*"];
+            qryObj.geometry=projectedGeoms[gridIncrement];                          
+            qryObj.returnGeometry=false;
+            var qryTaskObj=new QueryTask("https://services7.arcgis.com/V0D79gP9Almspf9E/arcgis/rest/services/RandomSterlingdata/FeatureServer/0");
+            qryTaskObj.execute(qryObj,pointQueryResults,pointQueryError);                        
+        }
+    }
+	    var gridStats=[];
 //    Calculating the values inside  grid
     function calculateValues(featureSet){                    
         var popCount=0;
@@ -156,18 +168,7 @@
     }    
     
 	    //    Summarising the points inside a particular grid 
-    function summerisePoints(){   
-        if(gridIncrement<=projectedGeoms.length)
-        {        
-            var qryObj=new Query();
-            qryObj.where="FID>0";
-            qryObj.outFields=["*"];
-            qryObj.geometry=projectedGeoms[gridIncrement];                          
-            qryObj.returnGeometry=false;
-            var qryTaskObj=new QueryTask("https://services7.arcgis.com/V0D79gP9Almspf9E/arcgis/rest/services/RandomSterlingdata/FeatureServer/0");
-            qryTaskObj.execute(qryObj,pointQueryResults,pointQueryError);                        
-        }
-    }
+    
 	    var gridArray=[];
 //   Adding the grids to the map
 	       var outSR = new SpatialReference(4326);
