@@ -95,6 +95,8 @@
                 new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
                 new Color([255,255,255]),2), new Color(colors[index]));
             }
+	var summerisePoints = new SpatialReference(4326);
+	var outSR = new SpatialReference(4326);
 	var gridGeoms=[];
 	esriConfig.defaults.geometryService.project( gridGeoms, outSR, function(projectedPolygons) {
 	projectedGeoms=projectedPolygons;
@@ -180,7 +182,7 @@
          }   
 	
 	//   Adding the grids to the map
-	var outSR = new SpatialReference(4326);
+	
 	function projectGrids(){        
        
         
