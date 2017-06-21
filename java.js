@@ -42,7 +42,7 @@
                        scalebarUnit: "dual"
            });
 	var gridIncrement=0,projectedGeoms=[];   
-		   //Apply color and transparancy for the grid
+//Apply color and transparancy for the grid
 //Confidence -->   Transperancy of the grid
 //0 – 25% ? 20% transparency
 //25% - 50% ? 30% transparency
@@ -121,8 +121,8 @@
         } 
         var xLong=Number($("#txtLong").val());
         var yLat=Number($("#txtLat").val());    
-	    //   Creating a buffer with given radius
-	    //   defining the UTM grid and querying the grids inside the buffer. 
+	//   Creating a buffer with given radius
+	//   defining the UTM grid and querying the grids inside the buffer. 
   var gridStats=[];
 //    Calculating the values inside  grid
     //    Summarising the points inside a particular grid 
@@ -130,8 +130,7 @@
         calculateValues(featureSet);
         summerisePoints();
     }
-	   
-    function pointQueryError(error){      
+	    function pointQueryError(error){      
         summerisePoints();
         gridIncrement++;
     }    
@@ -170,18 +169,10 @@
             
              applyColor(obj.cCnt,popCount);          
          }   
-	   
-	  
-	  
-	   
-	   
-    
 	    var gridArray=[];
-//   Adding the grids to the map
+	    //   Adding the grids to the map
 	       var outSR = new SpatialReference(4326);
-              
-   
-	    function projectGrids(){         
+	function projectGrids(){        
        
         var gridGeoms=[];
         projectedGeoms=[];
@@ -206,7 +197,7 @@
            alert("No features found");
        }
    }
-	    function errorGridResults(error){
+	function errorGridResults(error){
        alert("Problem in Query"); 
    }
 	    function queryGrids(){
@@ -228,7 +219,7 @@
        clearGraphics();
        queryGrids();
    }
-	    function createBuffer(point){ //
+	function createBuffer(point){ //
        var params = new BufferParameters();
        params.distances = [Number($("#txtRadius").val())];
        params.geodesic=true;
