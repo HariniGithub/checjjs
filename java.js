@@ -95,8 +95,12 @@
                 new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
                 new Color([255,255,255]),2), new Color(colors[index]));
             }
-	  var gridArray=[];
-            var gra=gridArray[gridIncrement];                    
+	var gridArray=[];
+	    projectedGeoms=[];
+        for(var i=0;i<gridArray.length;i++){
+            gridGeoms.push(gridArray[i].geometry);
+        }
+	var gra=gridArray[gridIncrement];                    
             map.graphics.remove(gridArray[gridIncrement]);
             gra.setSymbol(gridSymbol);
             map.graphics.add(gra);
@@ -175,10 +179,7 @@
 	function projectGrids(){        
        
         var gridGeoms=[];
-        projectedGeoms=[];
-        for(var i=0;i<gridArray.length;i++){
-            gridGeoms.push(gridArray[i].geometry);
-        }
+        
         esriConfig.defaults.geometryService.project( gridGeoms, outSR, function(projectedPolygons) {
             projectedGeoms=projectedPolygons;
             summerisePoints();
