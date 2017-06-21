@@ -96,7 +96,7 @@
                 new Color([255,255,255]),2), new Color(colors[index]));
                 break;
                 
-                case (pCnt>=100 && pCnt<1000):
+                case (pCnt>1000):
                     index = 3;
                     gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
                 new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
