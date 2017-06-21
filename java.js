@@ -30,6 +30,7 @@
        esriConfig.defaults.geometryService =
                new GeometryService("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Utilities/Geometry/GeometryServer");
 //       Displaying Topo map
+	var gridArray=[];
     var map = new Map("mapDiv", { 
            basemap: "topo",
            center: [-77.43, 39.01],
@@ -102,7 +103,7 @@
 	projectedGeoms=projectedPolygons;
 	summerisePoints();
         });
-	var gridArray=[];
+	
 	projectedGeoms=[];
         for(var i=0;i<gridArray.length;i++){
             gridGeoms.push(gridArray[i].geometry);
