@@ -41,7 +41,14 @@
                map: map,
                        scalebarUnit: "dual"
            });
-       
+        function clearGraphics(){
+       if(gridArray.length>0){
+           for(var i=0;i<gridArray.length;i++){
+               map.graphics.remove(gridArray[i]);
+           }
+           gridArray=[]; 
+       }
+   }
 //     Defining the symbol of the buffer  
     var bufferSymb = new SimpleFillSymbol(SimpleFillSymbol.STYLE_NULL,
             new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,new Color([105, 105, 255]),2), new Color([255, 255, 0, 0.25]));
@@ -53,43 +60,10 @@
             map.graphics.remove(bufferGeom);
         } 
         var xLong=Number($("#txtLong").val());
-        var yLat=Number($("#txtLat").val());                   
-        
-       //var point = new Point([-77.468,38.854],new SpatialReference({ wkid:4326 }));
-       var point = new Point([xLong,yLat],new SpatialReference({ wkid:4326 }));
-       createBuffer(point);
-   });
-//   Creating a buffer with given radius
-   function createBuffer(point){ //
-       var params = new BufferParameters();
-       params.distances = [Number($("#txtRadius").val())];
-       params.geodesic=true;
-       params.outSpatialReference = map.spatialReference;
-       params.unit = GeometryService.UNIT_METER;
-       params.geometries = [point];
-       esriConfig.defaults.geometryService.buffer(params, showBuffer);                    
-   }
-//   Displaying the buffer
-   function showBuffer(bufferedGeometries){
-       arrayUtils.forEach(bufferedGeometries, function (geometry) {
-           var bufferedGeometry = new Graphic(geometry, bufferSymb);
-           map.graphics.add(bufferedGeometry);  
-           map.setExtent(geometry.getExtent());
-           bufferGeom=bufferedGeometry;
-       });
-       clearGraphics();
-       queryGrids();
-   }
-//   defining the UTM grid and querying the grids inside the buffer. 
-   function queryGrids(){
-       var qryObj=new Query();
-       qryObj.where="OBJECTID>0";  
-       qryObj.geometry=bufferGeom.geometry;
-       qryObj.returnGeometry=true;
-       var qryTaskObj=new QueryTask("https://services7.arcgis.com/V0D79gP9Almspf9E/arcgis/rest/services/mgrs100/FeatureServer/0");
-       qryTaskObj.execute(qryObj,gridQueryResults,errorGridResults);
-   }
-   var gridArray=[];
+        var yLat=Number($("#txtLat").val());    
+	    //   Creating a buffer with given radius
+	    //   defining the UTM grid and querying the grids inside the buffer. 
+  var gridArray=[];
 //   Adding the grids to the map
    function gridQueryResults(featureSet){
        if(featureSet.features.length>0){
@@ -104,17 +78,47 @@
            alert("No features found");
        }
    }
+	    function queryGrids(){
+       var qryObj=new Query();
+       qryObj.where="OBJECTID>0";  
+       qryObj.geometry=bufferGeom.geometry;
+       qryObj.returnGeometry=true;
+       var qryTaskObj=new QueryTask("https://services7.arcgis.com/V0D79gP9Almspf9E/arcgis/rest/services/mgrs100/FeatureServer/0");
+       qryTaskObj.execute(qryObj,gridQueryResults,errorGridResults);
+   }
+   //   Displaying the buffer
+   function showBuffer(bufferedGeometries){
+       arrayUtils.forEach(bufferedGeometries, function (geometry) {
+           var bufferedGeometry = new Graphic(geometry, bufferSymb);
+           map.graphics.add(bufferedGeometry);  
+           map.setExtent(geometry.getExtent());
+           bufferGeom=bufferedGeometry;
+       });
+       clearGraphics();
+       queryGrids();
+   }
+	    function createBuffer(point){ //
+       var params = new BufferParameters();
+       params.distances = [Number($("#txtRadius").val())];
+       params.geodesic=true;
+       params.outSpatialReference = map.spatialReference;
+       params.unit = GeometryService.UNIT_METER;
+       params.geometries = [point];
+       esriConfig.defaults.geometryService.buffer(params, showBuffer);                    
+   }
+        
+       //var point = new Point([-77.468,38.854],new SpatialReference({ wkid:4326 }));
+       var point = new Point([xLong,yLat],new SpatialReference({ wkid:4326 }));
+       createBuffer(point);
+   });
+
+
+
+   
    function errorGridResults(error){
        alert("Problem in Query"); 
    }
-   function clearGraphics(){
-       if(gridArray.length>0){
-           for(var i=0;i<gridArray.length;i++){
-               map.graphics.remove(gridArray[i]);
-           }
-           gridArray=[]; 
-       }
-   }
+  
    var outSR = new SpatialReference(4326);
    var gridIncrement=0,projectedGeoms=[];                
    function projectGrids(){         
@@ -177,14 +181,14 @@
          }                
 //Apply color and transparancy for the grid
 //Confidence -->   Transperancy of the grid
-//0 – 25% ? 20% transparency
+//0 â€“ 25% ? 20% transparency
 //25% - 50% ? 30% transparency
 //50% - 75% ? 40% transparency
 //75% + ? 50% transparency
 //popultion density-->Colors for the grid
-//1 – 10 --> green 
-//10 – 100 –-> yellow 
-//100 – 1000 –-> orange 
+//1 â€“ 10 --> green 
+//10 â€“ 100 â€“-> yellow 
+//100 â€“ 1000 â€“-> orange 
 //1000+ --> red
     function applyColor(cCnt,pCnt){
         
