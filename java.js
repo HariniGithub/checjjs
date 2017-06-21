@@ -95,6 +95,7 @@
                 new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
                 new Color([255,255,255]),2), new Color(colors[index]));
             }
+	  var gridArray=[];
             var gra=gridArray[gridIncrement];                    
             map.graphics.remove(gridArray[gridIncrement]);
             gra.setSymbol(gridSymbol);
@@ -168,7 +169,7 @@
             
              applyColor(obj.cCnt,popCount);          
          }   
-	var gridArray=[];
+	
 	//   Adding the grids to the map
 	var outSR = new SpatialReference(4326);
 	function projectGrids(){        
