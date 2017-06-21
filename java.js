@@ -41,6 +41,7 @@
                map: map,
                        scalebarUnit: "dual"
            });
+	var gridIncrement=0,projectedGeoms=[];   
 		   //Apply color and transparancy for the grid
 //Confidence -->   Transperancy of the grid
 //0 – 25% ? 20% transparency
@@ -122,7 +123,11 @@
         var yLat=Number($("#txtLat").val());    
 	    //   Creating a buffer with given radius
 	    //   defining the UTM grid and querying the grids inside the buffer. 
-  function summerisePoints(){   
+   function pointQueryResults(featureSet){                             
+        calculateValues(featureSet);
+        summerisePoints();
+    }
+	    function summerisePoints(){   
         if(gridIncrement<=projectedGeoms.length)
         {        
             var qryObj=new Query();
@@ -158,10 +163,7 @@
             
              applyColor(obj.cCnt,popCount);          
          }   
-	    function pointQueryResults(featureSet){                             
-        calculateValues(featureSet);
-        summerisePoints();
-    }
+	   
     function pointQueryError(error){      
         summerisePoints();
         gridIncrement++;
@@ -172,7 +174,7 @@
 	    var gridArray=[];
 //   Adding the grids to the map
 	       var outSR = new SpatialReference(4326);
-   var gridIncrement=0,projectedGeoms=[];                
+              
    
 	    function projectGrids(){         
        
@@ -198,6 +200,9 @@
        }else{
            alert("No features found");
        }
+   }
+	    function errorGridResults(error){
+       alert("Problem in Query"); 
    }
 	    function queryGrids(){
        var qryObj=new Query();
@@ -232,13 +237,6 @@
        var point = new Point([xLong,yLat],new SpatialReference({ wkid:4326 }));
        createBuffer(point);
    });
-
-
-
-   
-   function errorGridResults(error){
-       alert("Problem in Query"); 
-   }
   
     }
     );
