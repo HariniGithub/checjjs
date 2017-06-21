@@ -126,15 +126,15 @@
   var gridStats=[];
 //    Calculating the values inside  grid
     //    Summarising the points inside a particular grid 
-	      function pointQueryResults(featureSet){                             
+	function pointQueryResults(featureSet){                             
         calculateValues(featureSet);
         summerisePoints();
     }
-	    function pointQueryError(error){      
+	function pointQueryError(error){      
         summerisePoints();
         gridIncrement++;
     }    
-	    function summerisePoints(){   
+	function summerisePoints(){   
         if(gridIncrement<=projectedGeoms.length)
         {        
             var qryObj=new Query();
@@ -145,9 +145,8 @@
             var qryTaskObj=new QueryTask("https://services7.arcgis.com/V0D79gP9Almspf9E/arcgis/rest/services/RandomSterlingdata/FeatureServer/0");
             qryTaskObj.execute(qryObj,pointQueryResults,pointQueryError);                        
         }
-    }
-	   
-	    function calculateValues(featureSet){                    
+    }   
+	function calculateValues(featureSet){                    
         var popCount=0;
         var conlevel=0;
         var obj=new Object();                    
@@ -169,9 +168,9 @@
             
              applyColor(obj.cCnt,popCount);          
          }   
-	    var gridArray=[];
-	    //   Adding the grids to the map
-	       var outSR = new SpatialReference(4326);
+	var gridArray=[];
+	//   Adding the grids to the map
+	var outSR = new SpatialReference(4326);
 	function projectGrids(){        
        
         var gridGeoms=[];
@@ -200,7 +199,7 @@
 	function errorGridResults(error){
        alert("Problem in Query"); 
    }
-	    function queryGrids(){
+	function queryGrids(){
        var qryObj=new Query();
        qryObj.where="OBJECTID>0";  
        qryObj.geometry=bufferGeom.geometry;
