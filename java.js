@@ -95,6 +95,11 @@
                 new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
                 new Color([255,255,255]),2), new Color(colors[index]));
             }
+	var gridGeoms=[];
+	esriConfig.defaults.geometryService.project( gridGeoms, outSR, function(projectedPolygons) {
+	projectedGeoms=projectedPolygons;
+	summerisePoints();
+        });
 	var gridArray=[];
 	projectedGeoms=[];
         for(var i=0;i<gridArray.length;i++){
@@ -178,12 +183,7 @@
 	var outSR = new SpatialReference(4326);
 	function projectGrids(){        
        
-        var gridGeoms=[];
         
-        esriConfig.defaults.geometryService.project( gridGeoms, outSR, function(projectedPolygons) {
-            projectedGeoms=projectedPolygons;
-            summerisePoints();
-        });
     }
    function gridQueryResults(featureSet){
        if(featureSet.features.length>0){
