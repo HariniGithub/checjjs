@@ -145,14 +145,6 @@
   var gridStats=[];
 //    Calculating the values inside  grid
     //    Summarising the points inside a particular grid 
-	function pointQueryResults(featureSet){                             
-        calculateValues(featureSet);
-        summerisePoints();
-    }
-	function pointQueryError(error){      
-        summerisePoints();
-        gridIncrement++;
-    }    
 	function summerisePoints(){   
         if(gridIncrement<=projectedGeoms.length)
         {        
@@ -164,7 +156,16 @@
             var qryTaskObj=new QueryTask("https://services7.arcgis.com/V0D79gP9Almspf9E/arcgis/rest/services/RandomSterlingdata/FeatureServer/0");
             qryTaskObj.execute(qryObj,pointQueryResults,pointQueryError);                        
         }
-    }   
+    }
+	function pointQueryResults(featureSet){                             
+        calculateValues(featureSet);
+        summerisePoints();
+    }
+	function pointQueryError(error){      
+        summerisePoints();
+        gridIncrement++;
+    }    
+	
 	function calculateValues(featureSet){                    
         var popCount=0;
         var conlevel=0;
