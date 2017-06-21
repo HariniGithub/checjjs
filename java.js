@@ -41,6 +41,65 @@
                map: map,
                        scalebarUnit: "dual"
            });
+		   //Apply color and transparancy for the grid
+//Confidence -->   Transperancy of the grid
+//0 – 25% ? 20% transparency
+//25% - 50% ? 30% transparency
+//50% - 75% ? 40% transparency
+//75% + ? 50% transparency
+//popultion density-->Colors for the grid
+//1 – 10 --> green 
+//10 – 100 –-> yellow 
+//100 – 1000 –-> orange 
+//1000+ --> red
+    function applyColor(cCnt,pCnt){
+        
+        var Confidence;
+        if(cCnt>=0.75){
+            Confidence=0.50;
+        }else if(cCnt>=0.50 && cCnt<=0.75){
+           Confidence=0.40;
+	}
+		else if(cCnt>=0.25 && cCnt<=0.50){
+            Confidence=0.30;
+        } else if (cCnt>=0 && cCnt<=0.25) {
+            Confidence=0.20;
+        }
+       var colors = [   
+            [0, 255, 0,Confidence],//0green
+            [255,255,0,Confidence],//1yellow
+            [255, 127, 0,Confidence],//2red
+            [255, 0, 0,Confidence] //3red
+            ];
+            var gridSymbol,index=0;
+            if(pCnt>=1 && pCnt<10){
+                index=0;
+                gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                new Color([255,255,255]),2), new Color(colors[index]));
+            }else if(pCnt>=10 && pCnt<100){
+                index=1;
+                gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                new Color([255,255,255]),2), new Color(colors[index]));
+            }else if(pCnt>=100 && pCnt<1000){
+                index=2;
+                gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                new Color([255,255,255]),2), new Color(colors[index]));
+            }
+            else{
+                index=3;
+                gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                new Color([255,255,255]),2), new Color(colors[index]));
+            }
+            var gra=gridArray[gridIncrement];                    
+            map.graphics.remove(gridArray[gridIncrement]);
+            gra.setSymbol(gridSymbol);
+            map.graphics.add(gra);
+            gridIncrement++;
+        }
         function clearGraphics(){
        if(gridArray.length>0){
            for(var i=0;i<gridArray.length;i++){
@@ -180,68 +239,5 @@
        alert("Problem in Query"); 
    }
   
-
-
-   
-                
-//Apply color and transparancy for the grid
-//Confidence -->   Transperancy of the grid
-//0 – 25% ? 20% transparency
-//25% - 50% ? 30% transparency
-//50% - 75% ? 40% transparency
-//75% + ? 50% transparency
-//popultion density-->Colors for the grid
-//1 – 10 --> green 
-//10 – 100 –-> yellow 
-//100 – 1000 –-> orange 
-//1000+ --> red
-    function applyColor(cCnt,pCnt){
-        
-        var Confidence;
-        if(cCnt>=0.75){
-            Confidence=0.50;
-        }else if(cCnt>=0.50 && cCnt<=0.75){
-           Confidence=0.40;
-	}
-		else if(cCnt>=0.25 && cCnt<=0.50){
-            Confidence=0.30;
-        } else if (cCnt>=0 && cCnt<=0.25) {
-            Confidence=0.20;
-        }
-       var colors = [   
-            [0, 255, 0,Confidence],//0green
-            [255,255,0,Confidence],//1yellow
-            [255, 127, 0,Confidence],//2red
-            [255, 0, 0,Confidence] //3red
-            ];
-            var gridSymbol,index=0;
-            if(pCnt>=1 && pCnt<10){
-                index=0;
-                gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
-                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                new Color([255,255,255]),2), new Color(colors[index]));
-            }else if(pCnt>=10 && pCnt<100){
-                index=1;
-                gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
-                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                new Color([255,255,255]),2), new Color(colors[index]));
-            }else if(pCnt>=100 && pCnt<1000){
-                index=2;
-                gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
-                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                new Color([255,255,255]),2), new Color(colors[index]));
-            }
-            else{
-                index=3;
-                gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
-                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                new Color([255,255,255]),2), new Color(colors[index]));
-            }
-            var gra=gridArray[gridIncrement];                    
-            map.graphics.remove(gridArray[gridIncrement]);
-            gra.setSymbol(gridSymbol);
-            map.graphics.add(gra);
-            gridIncrement++;
-        }
     }
     );
