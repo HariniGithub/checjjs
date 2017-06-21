@@ -74,28 +74,34 @@
             [255, 0, 0,Confidence] //3red
             ];
             var gridSymbol,index=0;
-            if(pCnt>=1 && pCnt<10){
-                index=0;
+            switch(pCnt){
+                case (pCnt>=1 && pCnt<10):
+                    index = 0;
+                    gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                new Color([255,255,255]),2), new Color(colors[index]));
+                break;
+                
+                case (pCnt>=10 && pCnt<100):
+                    index = 1;
                 gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
                 new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
                 new Color([255,255,255]),2), new Color(colors[index]));
-            }else if(pCnt>=10 && pCnt<100){
-                index=1;
-                gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                break;
+                
+                case (pCnt>=100 && pCnt<1000):
+                    index = 2;
+                    gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
                 new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
                 new Color([255,255,255]),2), new Color(colors[index]));
-            }else if(pCnt>=100 && pCnt<1000){
-                index=2;
-                gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                break;
+                
+                case (pCnt>=100 && pCnt<1000):
+                    index = 3;
+                    gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
                 new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
                 new Color([255,255,255]),2), new Color(colors[index]));
-            }
-            else{
-                index=3;
-                gridSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
-                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                new Color([255,255,255]),2), new Color(colors[index]));
-            }
+                break;}
 	var summerisePoints = new SpatialReference(4326);
 	var outSR = new SpatialReference(4326);
 	var gridGeoms=[];
